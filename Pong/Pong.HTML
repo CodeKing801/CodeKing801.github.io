@@ -1,0 +1,90 @@
+<html>
+<head>
+<title> Pong </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start() {
+	sjs.open("target",500,400);
+	//Ball Object and Properties
+	var ball = new sjs.Image("Images/pizza.png")
+	ball.type = "ball";
+	ball.setSize (75,75);
+	ball.friction = 0;
+	ball.moveTo(220,170);
+	ball.bounce();
+	ball.pushUp(5);
+	ball.pushLeft(1);
+	//paddles and properties
+	//paddle1
+	var paddle1 = new sjs.Image("Images/red.png")
+	paddle1.type = "paddle1"
+	paddle1.moveTo(175,0)
+	paddle1.setSize(150,20);
+	//paddle2
+	var paddle2 = new sjs.Image("Images/blue.png")
+	paddle2.type = "paddle2"
+	paddle2.setSize(150,20);
+	paddle2.moveTo(175,400)
+	//paddle movement
+	sjs.keyDown (LEFT_KEY, function() {
+		paddle1.pushLeft();
+	});
+
+	sjs.keyDown (RIGHT_KEY, function() {
+		paddle1.pushRight();
+	});
+
+
+	sjs.keyDown (A_KEY, function() {
+		paddle2.pushLeft();
+	});
+	
+	sjs.keyDown (D_KEY, function() {
+		paddle2.pushRight();
+	});
+//sound effect code
+	var soundEffect = new Audio ('Music/pop.mp3');
+	
+//score updating properties
+	var scoreRD = 0;
+	var score_txtRD = new sjs.Text ("score: 0", 21, "red")
+	//collision properties
+	var scoreBL = 0;
+	var score_txtBL = new sjs.Text ("score: 0", 21, "blue")
+	score_txtBL.moveTo(410,375)
+
+	sjs.onHit("ball","paddle1", function (ball,paddle) {
+		soundEffect.play();
+		sjs.bounceOff(ball,paddle);
+	});
+		sjs.onHit("ball","paddle2", function (ball,paddle) {
+			soundEffect.play();
+			sjs.bounceOff(ball,paddle);
+		});
+	sjs.onHit("ball","bottom_screen", function (ball,bottom_screen) {
+		soundEffect.play();
+		scoreRD = scoreRD + 1;
+		score_txtRD.setText ("score: "+scoreRD);
+		sjs.bounceOff(ball,bottom_screen);
+		if(scoreRD == 11){
+		window.location = "gameover.html";
+		}
+	});
+		sjs.onHit("ball","top_screen", function (ball,top_screen) {
+			soundEffect.play();
+			scoreBL = scoreBL + 1;
+			score_txtBL.setText ("score: "+scoreBL);
+			sjs.bounceOff(ball,top_screen);
+			if(scoreBL == 11){
+		window.location = "gameover.html";
+			}	
+		});
+} //endstart
+</script>
+</head>
+<body onload="start()">
+<h1> Pong Game </h1>
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>
+
